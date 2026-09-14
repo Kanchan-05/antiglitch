@@ -19,6 +19,9 @@ setup(
     python_requires=">=3.11",
 
     entry_points={
+        "pycbc.waveform.td": [
+            "antiglitch = antiglitch.gen_waveform:antiglitch_waveform_td",
+        ],
         "pycbc.waveform.fd": [
             "antiglitch = antiglitch.gen_waveform:antiglitch_waveform_fd",
         ],

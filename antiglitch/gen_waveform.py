@@ -1,30 +1,57 @@
 import numpy as np
 from pycbc.types import FrequencySeries, TimeSeries
 
-def antiglitch_waveform_td(**kwds):
-    """Generate anti-glitch waveform in the time domain."""
+# def antiglitch_waveform_td(**kwds):
+#     """Generate anti-glitch waveform in the time domain."""
  
-    delta_t = kwds['delta_t'] 
+#     delta_t = kwds['delta_t'] 
 
-    # Nyquist frequency determined by sampling rate
-    f_nyquist = 1.0 / (2 * delta_t)
-    delta_f = 1.0 if kwds.get('delta_f') is None else kwds['delta_f']
+#     # Nyquist frequency determined by sampling rate
+#     f_nyquist = 1.0 / (2 * delta_t)
+#     delta_f = 1.0 if kwds.get('delta_f') is None else kwds['delta_f']
     
-    # Prepare parameters for FD function
+#     # Prepare parameters for FD function
+#     fd_kwds = kwds.copy()
+#     fd_kwds['delta_f'] = delta_f
+#     fd_kwds['f_final'] = f_nyquist
+    
+#     # Generate frequency domain waveform
+
+#     hp_fd, hc_fd = antiglitch_waveform_fd(**fd_kwds)
+    
+#     # Convert to time domain
+#     hp = hp_fd.to_timeseries(delta_t=delta_t)
+#     hc = hc_fd.to_timeseries(delta_t=delta_t)
+ 
+#     return hp, hc
+
+def antiglitch_waveform_td(**kwds):
+    """
+    Generate a time-domain anti-glitch waveform
+    centered at t = 0.
+    """
+
+    delta_t = kwds.get('delta_t') or 1.0 / kwds['sample_rate']
+    delta_f = kwds.get('delta_f') or 1.0
+    f_nyquist = 1.0 / (2.0 * delta_t)
+
+    # Prepare FD parameters
     fd_kwds = kwds.copy()
     fd_kwds['delta_f'] = delta_f
     fd_kwds['f_final'] = f_nyquist
-    
-    # Generate frequency domain waveform
 
-    hp_fd, hc_fd = antiglitch_waveform_fd(**fd_kwds)
-    
-    # Convert to time domain
+    # Generate FD waveform
+    hp_fd, _ = antiglitch_waveform_fd(**fd_kwds)
+
+    # Convert to TD
     hp = hp_fd.to_timeseries(delta_t=delta_t)
-    hc = hc_fd.to_timeseries(delta_t=delta_t)
- 
-    return hp, hc
 
+    # Center the glitch at t = 0
+    shift = len(hp) * delta_t / 2.0
+    hp = hp.cyclic_time_shift(shift)
+    hp.start_time = -shift
+
+    return hp, None
 
 def antiglitch_waveform_fd(**kwds):
     """Generate a minimal anti-glitch waveform in the frequency domain."""

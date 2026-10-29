@@ -2,7 +2,7 @@
 
 A PyCBC waveform plugin for generating phenomenological anti-glitch waveforms with a log-Gaussian frequency profile.
 
-The package provides frequency-domain and time-domain waveforms through PyCBC's standard waveform interface, using the approximant name antiglitch. It is intended for waveform studies and integration into PyCBC-based injection and matched-filter analyses. The waveform implementation references the model described in arXiv:2309.06594.
+The package provides frequency-domain and time-domain waveforms through PyCBC's standard waveform interface, using the approximant name antiglitch. It is intended for waveform studies and integration into PyCBC-based injection and matched-filter analyses. The waveform implementation references the model described in [arXiv:2309.06594](https://arxiv.org/abs/2309.06594).
 
 ### Installation 
 

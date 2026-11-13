@@ -69,4 +69,8 @@ def antiglitch_waveform_td(**kwds):
     epoch = -(n // 2) * delta_t
     hp = TimeSeries(h, delta_t=delta_t, epoch=epoch)
     hc = TimeSeries(np.zeros_like(h), delta_t=delta_t, epoch=epoch)
+
+    # taper the waveform at the start and end to reduce edge effects
+    hp = hp.taper_timeseries('TAPER_STARTEND')
+    hc = hc.taper_timeseries('TAPER_STARTEND')
     return hp, hc

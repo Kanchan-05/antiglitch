@@ -52,7 +52,7 @@ def antiglitch_waveform_td(**kwds):
     fd_kwds = kwds.copy()
     fd_kwds["delta_f"] = delta_f
     fd_kwds["f_final"] = min(float(kwds.get("f_final") or nyquist), nyquist)
-    fd_kwds["t0"] = 0.0
+    fd_kwds["t0"] = float(kwds.get("tc", 0.0))
     hp_fd, _ = antiglitch_waveform_fd(**fd_kwds)
 
     spectrum = np.zeros(n // 2 + 1, dtype=np.complex128)

@@ -61,9 +61,8 @@ def antiglitch_waveform_td(**kwds):
 
     h = np.fft.irfft(spectrum, n=n) / delta_t
 
-    # Put the largest absolute sample at the center of the array.
-    peak_index = np.argmax(np.abs(h))
-    h = np.roll(h, n // 2 - peak_index)
+    # Shift t=0 (index 0 of irfft) to the center of the array (index n // 2).
+    h = np.roll(h, n // 2)
 
     # The central sample now has time exactly zero.
     epoch = -(n // 2) * delta_t
